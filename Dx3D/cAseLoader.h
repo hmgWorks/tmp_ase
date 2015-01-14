@@ -39,8 +39,10 @@ private:
 	void	ProcessMeshTVertList(std::vector<D3DXVECTOR2>& vecVT);
 	void	ProcessMeshTFaceList(OUT std::vector<ST_PNT_VERTEX>& vecVertex, IN std::vector<D3DXVECTOR2>& vecVT);
 	void	ProcessMeshNormals(OUT std::vector<ST_PNT_VERTEX>& vecVertex);
-	void	ProcessAnimation();
-	void	ProcessControlPosTrack();
+	void	ProcessAnimation(cFrame* pFrame);
+	void	ProcessControlPosTrack(cFrame* pFrame);
+	void	ProcessControlRotTrack(cFrame* pFrame);
+
 	
 };
 

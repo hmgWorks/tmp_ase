@@ -3,6 +3,7 @@
 #include "Asciitok.h"
 #include "cFrame.h"
 #include "cMtlTex.h"
+#include "cAnimation.h"
 
 cAseLoader::cAseLoader(void)
 	: m_pRootFrame(NULL)
@@ -261,7 +262,7 @@ cFrame* cAseLoader::ProcessGeomObject()
 		else if(IsEqual(szToken, ID_TM_ANIMATION))
 		{
 			//SkipBlock();	
-			ProcessAnimation();
+			ProcessAnimation(pFrame);
 		}
 		else if(IsEqual(szToken, ID_MATERIAL_REF))
 		{
@@ -512,7 +513,7 @@ void cAseLoader::ProcessMeshNormals( OUT std::vector<ST_PNT_VERTEX>& vecVertex )
 	} while (nLevel > 0);
 }
 
-void cAseLoader::ProcessAnimation()
+void cAseLoader::ProcessAnimation(cFrame* pFrame)
 {
 	int nLevel = 0;
 	do
@@ -528,17 +529,17 @@ void cAseLoader::ProcessAnimation()
 		}
 		else if (IsEqual(szToken, ID_POS_TRACK))
 		{
-			ProcessControlPosTrack();
+			ProcessControlPosTrack(pFrame);
 		}
 		else if (IsEqual(szToken, ID_ROT_TRACK))
 		{
-			
+			ProcessControlRotTrack(pFrame);
 		}
 	} while (nLevel > 0);
 }
 
-void cAseLoader::ProcessControlPosTrack()
-{
+void cAseLoader::ProcessControlPosTrack(cFrame* pFrame)
+{		
 	int nLevel = 0;
 	do
 	{
@@ -553,10 +554,54 @@ void cAseLoader::ProcessControlPosTrack()
 		}
 		else if (IsEqual(szToken, ID_POS_SAMPLE))
 		{
-			int nFrame640 = GetInteger();
-			int x = GetInteger();
-			int z = GetInteger();
-			int y = GetInteger();
+			if (pFrame->GetAni() == NULL)
+			{
+				cAnimation* pAni = new cAnimation;
+				pFrame->SetAni(pAni);
+				SAFE_RELEASE(pAni);
+			}
+			int key = GetInteger();
+			float x = GetFloat();
+			float z = GetFloat();
+			float y = GetFloat();
+
+			pFrame->GetAni()->AddPos(key, x, y, z);
+			
 		}		
+	} while (nLevel > 0);	
+}
+
+void cAseLoader::ProcessControlRotTrack(cFrame* pFrame)
+{	
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}		
+		else if (IsEqual(szToken, ID_ROT_SAMPLE))
+		{	
+			if (pFrame->GetAni() == NULL)
+			{
+				cAnimation* pAni = new cAnimation;
+				pFrame->SetAni(pAni);
+				SAFE_RELEASE(pAni);
+			}
+
+			int key = GetInteger();
+			float x = GetFloat();
+			float z = GetFloat();
+			float y = GetFloat();
+			float w = GetFloat();
+
+			pFrame->GetAni()->AddRot(key, x, y, z, w);
+		}
 	} while (nLevel > 0);
+
 }

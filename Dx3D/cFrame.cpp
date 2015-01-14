@@ -91,17 +91,18 @@ void cFrame::SetMtlTex( cMtlTex* pMtlTex )
 }
 
 void cFrame::SetAni(cAnimation* pAni)
-{
-	if (!m_pAnimation)
+{	
+	if (m_pAnimation == NULL)
 	{
-		pAni->AddRef();
+		if (pAni != NULL)
+			pAni->AddRef();
 		m_pAnimation = pAni;		
 	}
 }
 void cFrame::Update( D3DXMATRIXA16* pmatParent )
 {
 	//m_matLocalTM = m_pAnimation
-	m_matWorldTM = m_pAnimation->Update(m_matLocalTM);
+	//m_matWorldTM = m_pAnimation->Update();
 	if(pmatParent)
 		m_matWorldTM *= (*pmatParent);
 	for each(auto pChild in m_vecChildren)

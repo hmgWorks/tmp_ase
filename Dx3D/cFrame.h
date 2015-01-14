@@ -26,6 +26,7 @@ public:
 	void BuidlMesh(std::vector<ST_PNT_VERTEX>& vecVertex);
 	void SetMtlTex(cMtlTex* pMtlTex);
 	void SetAni(cAnimation* pAni);
+	cAnimation* GetAni(){ return m_pAnimation; }
 	void Update(D3DXMATRIXA16* pmatParent);
 	void Render();
 	void Destroy();
