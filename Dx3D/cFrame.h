@@ -1,6 +1,7 @@
 #pragma once
 
 class cMtlTex;
+class cAnimation;
 
 class cFrame
 {
@@ -13,6 +14,9 @@ private:
 	D3DXMATRIXA16			m_matWorldTM;
 	LPD3DXMESH				m_pMesh;
 	cMtlTex*				m_pMtlTex;
+
+	cAnimation*				m_pAnimation;
+
 public:
 	cFrame(void);
 	~cFrame(void);
@@ -21,6 +25,7 @@ public:
 	void CalcLocalTM(D3DXMATRIXA16* pParent);
 	void BuidlMesh(std::vector<ST_PNT_VERTEX>& vecVertex);
 	void SetMtlTex(cMtlTex* pMtlTex);
+	void SetAni(cAnimation* pAni);
 	void Update(D3DXMATRIXA16* pmatParent);
 	void Render();
 	void Destroy();

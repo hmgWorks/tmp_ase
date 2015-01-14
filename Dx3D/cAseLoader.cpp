@@ -260,7 +260,8 @@ cFrame* cAseLoader::ProcessGeomObject()
 		}
 		else if(IsEqual(szToken, ID_TM_ANIMATION))
 		{
-			SkipBlock();	
+			//SkipBlock();	
+			ProcessAnimation();
 		}
 		else if(IsEqual(szToken, ID_MATERIAL_REF))
 		{
@@ -508,5 +509,54 @@ void cAseLoader::ProcessMeshNormals( OUT std::vector<ST_PNT_VERTEX>& vecVertex )
 			vecVertex[nFaceIndex * 3 + aIndexCorr[nIndexAtFace]].n = D3DXVECTOR3(x, y, z);
 			++nIndexAtFace;
 		}
+	} while (nLevel > 0);
+}
+
+void cAseLoader::ProcessAnimation()
+{
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_POS_TRACK))
+		{
+			ProcessControlPosTrack();
+		}
+		else if (IsEqual(szToken, ID_ROT_TRACK))
+		{
+			
+		}
+	} while (nLevel > 0);
+}
+
+void cAseLoader::ProcessControlPosTrack()
+{
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_POS_SAMPLE))
+		{
+			int nFrame640 = GetInteger();
+			int x = GetInteger();
+			int z = GetInteger();
+			int y = GetInteger();
+		}		
 	} while (nLevel > 0);
 }

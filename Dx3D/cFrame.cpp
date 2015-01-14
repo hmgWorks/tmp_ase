@@ -1,11 +1,12 @@
 #include "StdAfx.h"
 #include "cFrame.h"
 #include "cMtlTex.h"
-
+#include "cAnimation.h"
 
 cFrame::cFrame(void)
 	: m_pMesh(NULL)
 	, m_pMtlTex(NULL)
+	, m_pAnimation(NULL)
 {
 	D3DXMatrixIdentity(&m_matLocalTM);
 	D3DXMatrixIdentity(&m_matWorldTM);
@@ -14,6 +15,7 @@ cFrame::cFrame(void)
 
 cFrame::~cFrame(void)
 {
+	SAFE_RELEASE(m_pAnimation);
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pMtlTex);
 }
@@ -88,9 +90,18 @@ void cFrame::SetMtlTex( cMtlTex* pMtlTex )
 	}
 }
 
+void cFrame::SetAni(cAnimation* pAni)
+{
+	if (!m_pAnimation)
+	{
+		pAni->AddRef();
+		m_pAnimation = pAni;		
+	}
+}
 void cFrame::Update( D3DXMATRIXA16* pmatParent )
 {
-	m_matWorldTM = m_matLocalTM;
+	//m_matLocalTM = m_pAnimation
+	m_matWorldTM = m_pAnimation->Update(m_matLocalTM);
 	if(pmatParent)
 		m_matWorldTM *= (*pmatParent);
 	for each(auto pChild in m_vecChildren)

@@ -75,7 +75,7 @@ void cMainGame::Setup()
 	//D3DXQUATERNION
 	//D3DXMatrixRotationQuaternion(¾Æ¿ôÇ² ¸ÅÆ®¸¯½º, ÄõÅÍ´Ï¾ğ)
 	//D3DXQuaternionSlerp(¾Æ¿ôÇ², Äõ1, Äõ2, t);
-
+	
 	for (int i = 0; i < 6; ++i)
 	{
 		cWayPoint* pWayPoint = new cWayPoint;

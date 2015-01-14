@@ -85,6 +85,7 @@
     <ClInclude Include="cActionMove.h" />
     <ClInclude Include="cActionRepeat.h" />
     <ClInclude Include="cActionSeq.h" />
+    <ClInclude Include="cAnimation.h" />
     <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cCircleRHW.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="cActionMove.cpp" />
     <ClCompile Include="cActionRepeat.cpp" />
     <ClCompile Include="cActionSeq.cpp" />
+    <ClCompile Include="cAnimation.cpp" />
     <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cCircleRHW.cpp" />
