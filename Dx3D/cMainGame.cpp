@@ -214,9 +214,9 @@ void cMainGame::Render()
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	m_pGrid->Render();
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
-	//m_pAseRoot->Render();
+	m_pAseRoot->Render();
 
-	D3DXMATRIXA16 matWorld;
+	/*D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
 	for each(auto p in m_vecWayPoint)
@@ -224,7 +224,7 @@ void cMainGame::Render()
 		p->Render();
 	}
 
-	m_pTeapot->Render();
+	m_pTeapot->Render();*/
 // 
 // 	D3DXMATRIXA16 matWorld;
 // 	D3DXMatrixIdentity(&matWorld);

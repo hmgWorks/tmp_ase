@@ -96,13 +96,18 @@ void cFrame::SetAni(cAnimation* pAni)
 	{
 		if (pAni != NULL)
 			pAni->AddRef();
-		m_pAnimation = pAni;		
+		m_pAnimation = pAni;
+		m_pAnimation->Setup(m_matLocalTM);
 	}
 }
 void cFrame::Update( D3DXMATRIXA16* pmatParent )
 {
-	//m_matLocalTM = m_pAnimation
-	//m_matWorldTM = m_pAnimation->Update();
+	g_pTimeManager->Update();
+	m_matWorldTM = m_matLocalTM;
+
+	if (m_pAnimation)
+		m_matWorldTM = m_pAnimation->Update();
+
 	if(pmatParent)
 		m_matWorldTM *= (*pmatParent);
 	for each(auto pChild in m_vecChildren)

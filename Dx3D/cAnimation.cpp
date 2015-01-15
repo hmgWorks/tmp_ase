@@ -3,9 +3,16 @@
 
 
 cAnimation::cAnimation()
+	:m_nIndex_a(0)
+	, m_nIndex_b(1)
+	, tmptime(640)
 {
 	D3DXMatrixIdentity(&m_matCurrentPos);
 	D3DXMatrixIdentity(&m_matCurrentRot);
+	D3DXMatrixIdentity(&m_matWorldTM);
+	
+	m_vecIndex = { 640, 1280, 1920, 2560, 3200 };
+	m_fPassTime = 0.0f;
 }
 
 cAnimation::~cAnimation()
@@ -15,11 +22,14 @@ cAnimation::~cAnimation()
 void cAnimation::Setup(D3DXMATRIXA16& matLocla)
 {
 	m_matPervLocal = matLocla;
+	m_fOldTime = 640.0f;
+	
 }
 
-void cAnimation::AddPos(int key, float x, float z, float y)
+void cAnimation::AddPos(int key, float x, float y, float z)
 {
-	D3DXMatrixTranslation(&m_mapControlPos[key], x, y, z);
+	//D3DXMatrixTranslation(&m_mapControlPos[key], x, y, z);
+	m_mapControlPos[key] = D3DXVECTOR3(x, y, z);
 }
 
 void cAnimation::AddRot(int key, float x, float y, float z, float w)
@@ -57,19 +67,40 @@ void cAnimation::AddRot(int key, float x, float y, float z, float w)
 	int n = 0;
 }
 
-void cAnimation::Update()
+D3DXMATRIXA16& cAnimation::Update()
 {
-	//from = 640;
-	//to = 1280;
-	//t = deltatime / (1280 - 640);
-	//if (t < 1.0f)
-	//{
-	//	//에니메이션 진행
-	//	D3DXVec3Lerp(&oup, &in, t);
-	//	
+	/*		
+		640부터 3200까지의 에니메이션
+		*아무것도 없을경우 가지고 있는 로컬
+		*'640' 이없고 '1280' 부터 일경우 '1280'으로 640~1280까지
 
-	//}
+		640 += gettickcount()/ 1280  - 640 = t
+		640
+	*/	
+	float tmp = 1280.0f - 640.0f;
+	m_fCurrentTime = g_pTimeManager->GetDeltaTime() + 640.0f;
+	m_fPassTime += m_fCurrentTime - m_fOldTime;
+	m_fOldTime = m_fCurrentTime;
+	float t = m_fPassTime / tmp;
+	
+	if (t < 1.0f)
+	{
+		if (m_mapControlPos.find(640) != m_mapControlPos.end() &&
+			m_mapControlPos.find(1280) != m_mapControlPos.end())
+		{
+			D3DXVECTOR3 v;
+			D3DXVec3Lerp(&v, &m_mapControlPos[640], &m_mapControlPos[1280], t);
 
-//	return m_matCurrentRot * m_matCurrentPos;
+			D3DXMatrixTranslation(&m_matCurrentPos, v.x, v.y, v.z);
+		}
+		else
+		{
+			m_matCurrentPos = m_matPervLocal;
+		}
+	}
+	else
+		m_fPassTime = 640.0f;
+	
+	return m_matCurrentPos;
 	
 }
